@@ -9,7 +9,6 @@ the authentication continues to fail. We also tried supabase and that didn't
 work either.
 **/
 
-
 using System;
 using System.Collections.ObjectModel;
 using Microsoft.Maui.Controls;
@@ -28,9 +27,10 @@ namespace Lab3
         {
             InitializeComponent();
             _brains = new BusinessLogic(new Database()); // creates an instance of the business logic to use as the database
-            Airports = new ObservableCollection<Airport>(_brains.GetAirports()); // gets the aiports from the database
+            Airports = new ObservableCollection<Airport>(_brains.GetAirports()); // gets the airports from the database
             AirportsList.ItemsSource = Airports;
         }
+
 
         /// <summary>
         /// Ensures the input fields are the correct format then creates a new airport and then adds it to the collection when the add 
@@ -74,8 +74,14 @@ namespace Lab3
             }
             else
             {
-                Airports.Add(newAirport); // if there is no error, add the airport and its information to the database
-                ClearEntries(); // clears the text for the inputs
+                // Add the new airport to the local collection and UI
+                Airports.Add(newAirport);
+
+                // Refresh the list and the UI
+                AirportsList.ItemsSource = null;
+                AirportsList.ItemsSource = Airports;
+
+                ClearEntries(); // Clear input fields
             }
         }
 
@@ -96,8 +102,8 @@ namespace Lab3
             }
 
             // chekc if any of the input fields are empty or null
-            if (string.IsNullOrWhiteSpace(CityEntry.Text) || 
-                string.IsNullOrWhiteSpace(DateVisitedEntry.Text) || 
+            if (string.IsNullOrWhiteSpace(CityEntry.Text) ||
+                string.IsNullOrWhiteSpace(DateVisitedEntry.Text) ||
                 string.IsNullOrWhiteSpace(RatingEntry.Text))
             {
                 DisplayAlert("Error", "All fields must be filled in before editing.", "OK");
@@ -145,7 +151,7 @@ namespace Lab3
             {
                 if (button.BindingContext is Airport airport) // checks that the binding context is an Airport
                 {
-                    string result = _brains.DeleteAirport(airport); // calls the delete airport method and checks for errors
+                    string result = _brains.DeleteAirport(airport.Id); // calls the delete airport method and checks for errors
                     if (result.Contains("Error"))
                     {
                         DisplayAlert("Error", result, "OK"); // show error if there was an error as an alert
@@ -167,46 +173,46 @@ namespace Lab3
         }
 
         /// <summary>
-        /// Returns a status message based on the number of airports visited.
+        /// Handles the click event for the Calculate Statistics button.
+        /// Calls the CalculateStatistics method to compute and display the result.
         /// </summary>
-        public void CalculateStatistics()
+        private void OnCalculateStatisticsClicked(object sender, EventArgs e)
         {
-            var airports = _brains.GetAirports(); // Gets the list of all airports using the business logic layer
-            var totalVisited = airports.Count; // Counts the total number of visited airports
+            // No need to re-fetch from the database here. Use the existing Airports collection.
+            var totalVisited = Airports.Count; // Use the updated local collection
 
             string status;
             int remainingVisits;
 
-            // Determines the user's status based on the number of airports visited
+            // Determine status based on the number of airports visited
             if (totalVisited >= 100)
             {
-                DisplayAlert("Status", "You are the highest status!", "OK"); // Max status if 100 or more airports visited
-                return;
+                status = "highest";
+                remainingVisits = 0; // No more visits needed
             }
-            else if (totalVisited >= 42) // Silver status requires 42 or more airports
+            else if (totalVisited >= 60)
+            {
+                status = "Gold";
+                remainingVisits = 100 - totalVisited; // Remaining visits for highest status
+            }
+            else if (totalVisited >= 42)
             {
                 status = "Silver";
-                remainingVisits = Math.Max(0, 60 - totalVisited); // Calculates how many more visits are needed for the next tier
+                remainingVisits = 60 - totalVisited; // Remaining visits for Gold status
             }
             else
             {
-                status = "Bronze"; // Default status if fewer than 42 airports visited
-                remainingVisits = Math.Max(0, 42 - totalVisited); // Calculates how many more visits are needed for Silver tier
+                status = "Bronze";
+                remainingVisits = 42 - totalVisited; // Remaining visits for Silver status
             }
 
-            // Constructs the message to display
-            string message;
-            if (totalVisited == 1)
-            {
-                message = $"{totalVisited} airport visited; {remainingVisits} airports remaining until achieving {status}.";
-            }
-            else
-            {
-                message = $"{totalVisited} airports visited; {remainingVisits} airports remaining until achieving {status}.";
-            }
+            // Build the result message
+            string resultMessage = totalVisited == 1
+                ? $"{totalVisited} airport visited; {remainingVisits} remaining until {status} status."
+                : $"{totalVisited} airports visited; {remainingVisits} remaining until {status} status.";
 
-            // Display the alert with the user's status and remaining visits
-            DisplayAlert("Airport Visit Status", message, "OK");
+            // Display the result in an alert
+            DisplayAlert("Statistics", resultMessage, "OK");
         }
 
 

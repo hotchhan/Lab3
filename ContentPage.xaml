@@ -33,7 +33,7 @@
         <StackLayout Padding="15" Spacing="20">
             <Button Text="Add Airport" Clicked="OnAddAirportClicked"/>
             <Button Text="Edit Airport" Clicked="OnEditAirportClicked"/>
-            <!--!<Button Text="Calculate Statistics" Clicked="CalculateStatistics"/> -->
+            <Button Text="Calculate Statistics" Clicked="OnCalculateStatisticsClicked"/>
         </StackLayout>
 
     </StackLayout>

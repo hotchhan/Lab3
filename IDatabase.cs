@@ -27,6 +27,13 @@ namespace Lab3
         ObservableCollection<Airport> SelectAllAirports();
 
         /// <summary>
+        /// Gets a specific airport by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the airport to find.</param>
+        /// <returns>The airport object if exists; otherwise, null.</returns>
+        ObservableCollection<Airport> SelectAirport(string id);
+
+        /// <summary>
         /// Inserts a new airport into the database.
         /// </summary>
         /// <param name="airport">The airport to insert.</param>
@@ -36,9 +43,9 @@ namespace Lab3
         /// <summary>
         /// Deletes an airport from the database by its ID.
         /// </summary>
-        /// <param name="id">The ID of the airport to delete.</param>
+        /// <param name="airport">The ID of the airport to delete.</param>
         /// <returns>A message saying if the airport was deleted from the database or not.</returns>
-        string DeleteAirport(Airport id);
+        string DeleteAirport(string airport);
 
         /// <summary>
         /// Updates an existing airport in the database.
