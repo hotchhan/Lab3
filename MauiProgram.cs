@@ -1,13 +1,10 @@
-﻿/*
-* Name: Hannah Hotchkiss, Carissa Engebose
-* Description: Lab 2 - App that allows you to input visited Airports to have a record of all visited and when you 
-* visited them
-* Date: 9/24/2024
-* Bugs: None known
-* Reflection: This app was a good excerise to understand the basics of creating a .NET MAUI app that includes a user 
-* interface and small backend which stores the data the user enters. Overall we think it helped us know more about how to 
-* use a UI and communicate with the overall structure of a C# app.
-*/
+﻿/**
+Name: Hannah Hotchkiss, Carissa Engebose
+Date: 10/1/24
+Description: Lab 2, but now with a remote database and data persistence
+Bugs: None known.
+**/
+
 using Microsoft.Extensions.Logging;
 
 namespace Lab3;
