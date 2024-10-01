@@ -42,7 +42,7 @@ namespace Lab3
         /// </summary>
         /// <param name="airport">The ID of the airport to delete.</param>
         /// <returns>A message saying if the airport was successfully deleted or not.</returns>
-        string DeleteAirport(Airport airport);
+        string DeleteAirport(string airport);
 
         /// <summary>
         /// Edits an existing airport's details.

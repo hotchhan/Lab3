@@ -70,11 +70,11 @@ namespace Lab3
         /// <summary>
         /// Deletes an airport by its ID.
         /// </summary>
-        /// <param name="airport">The ID of the airport to delete.</param>
+        /// <param name="id">The ID of the airport to delete.</param>
         /// <returns>A message saying if the airport was successfully deleted from the database or not.</returns>
-        public string DeleteAirport(Airport airport)
+        public string DeleteAirport(string id)
         {
-            return _database.DeleteAirport(airport);
+            return _database.DeleteAirport(id);
         }
 
         /// <summary>
@@ -97,28 +97,43 @@ namespace Lab3
         }
 
         /// <summary>
-        /// Calculates and returns statistics about the airports visited and the average rating.
-        /// </summary>
-        /// <returns>A string with the number of airports visited and the average rating.</returns>
-        public string CalculateStatistics()
+    /// Returns a status message based on the number of airports visited.
+    /// </summary>
+    /// <returns>A string describing the user's current status and how many more visits are required for the next tier.</returns>
+    public string CalculateStatistics()
+    {
+        var airports = _database.SelectAllAirports(); // Gets the list of all airports
+        var totalVisited = airports.Count; // Counts the total number of visited airports
+        
+        string status;
+        int remainingVisits;
+
+        // Determines the user's status based on the number of airports visited
+        if (totalVisited >= 100) 
         {
-            var airports = _database.SelectAllAirports();
-            var totalVisited = airports.Count;
-
-            if (totalVisited == 0) // checks if visited no airports
-            {
-                return "No airports visited yet.";
-            }
-
-            double averageRating = 0;
-            foreach (var airport in airports)
-            {
-                averageRating += airport.Rating;
-            }
-            averageRating /= totalVisited; // calculates average rating of airports
-
-            return $"{totalVisited} airports visited. Average rating: {averageRating:F1}"; // returns the statistics about the airport
+            return $"You are the highest status!"; // Max status if 100 or more airports visited
+        } 
+        else if (totalVisited >= 42) // Silver status requires 42 or more airports
+        {
+            status = "Silver";
+            remainingVisits = Math.Max(0, 60 - totalVisited); // Calculates how many more visits are needed for the next tier
         }
+        else
+        {
+            status = "Bronze"; // Default status if fewer than 42 airports visited
+            remainingVisits = Math.Max(0, 42 - totalVisited); // Calculates how many more visits are needed for Silver tier
+        }
+
+        // Returns a message with the total visited airports and how many more are needed for the next status tier
+        if (totalVisited == 1) 
+        {
+            return $"\n{totalVisited} airport visited; {remainingVisits} airports remaining until achieving {status}.";
+        } 
+        else 
+        {
+            return $"\n{totalVisited} airports visited; {remainingVisits} airports remaining until achieving {status}.";
+        }
+    }
 
         /// <summary>
         /// Gets a list of all airports from the database.
