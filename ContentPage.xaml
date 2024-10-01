@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Lab3.MainPage"
+             Title="Airports">
+
+    <StackLayout Padding="10">
+
+        <!-- List of Airports -->
+        <CollectionView x:Name="AirportsList" SelectionMode="Single">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Horizontal" Padding="5">
+                        <Label Text="{Binding Id}" WidthRequest="50"/>
+                        <Label Text="{Binding City}" WidthRequest="100"/>
+                        <Label Text="{Binding FormattedDate}" WidthRequest="180"/>
+                        <Label Text="{Binding Rating}" WidthRequest="50"/>
+                        <ImageButton Source="trash.png" Clicked="OnDeleteClicked" WidthRequest="20" HeightRequest="20"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Input Fields -->
+        <StackLayout Orientation="Horizontal" Padding="5">
+            <Entry x:Name="IdEntry" Placeholder="Id" WidthRequest="60"/>
+            <Entry x:Name="CityEntry" Placeholder="City" WidthRequest="100"/>
+            <Entry x:Name="DateVisitedEntry" Placeholder="Date Visited" WidthRequest="150"/>
+            <Entry x:Name="RatingEntry" Placeholder="Rating" WidthRequest="60"/>
+        </StackLayout>
+
+        <!-- Buttons (Stacked Vertically) -->
+        <StackLayout Padding="15" Spacing="20">
+            <Button Text="Add Airport" Clicked="OnAddAirportClicked"/>
+            <Button Text="Edit Airport" Clicked="OnEditAirportClicked"/>
+            <!--!<Button Text="Calculate Statistics" Clicked="CalculateStatistics"/> -->
+        </StackLayout>
+
+    </StackLayout>
+</ContentPage>
